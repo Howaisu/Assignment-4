@@ -3,6 +3,9 @@
 ArrayList<Leg> legs;  // ArrayList to "hold" multiple legs, really important, PVector only able to set once
 color headColor = color(59, 41, 23);
 color bodyColor = color(37, 15, 10);
+//leg controller
+boolean toggleGroup = true;  // set up as true
+int frameInterval = 15;  // length of time: 1s
 
 void setup() {
   size(400, 400);
@@ -15,18 +18,45 @@ void setup() {
   legs.add(new Leg(360, 400, 220, 220)); // 4th right leg
 
   // Add left legs
-  legs.add(new Leg(40, 40, 180, 160)); // 1st left leg
-  legs.add(new Leg(0, 100, 180, 180)); // 2nd left leg
-  legs.add(new Leg(40, 310, 180, 200)); // 3rd left leg
+
   legs.add(new Leg(60, 400, 180, 220)); // 4th left leg
+   legs.add(new Leg(40, 40, 180, 160)); // 1st left leg
+    legs.add(new Leg(0, 100, 180, 180)); // 2nd left leg
+     legs.add(new Leg(40, 310, 180, 200)); // 3rd left leg
 }
 
 void draw() {
   background(255);  // Refresh background
  // Draw all legs
-  for (Leg leg : legs) {
-    leg.update();
+ for (Leg leg : legs) {
+  //  leg.update();
     leg.display();
+  }
+  //super difficult organical legs
+   // Switch, in a span of time
+  if (frameCount % frameInterval == 0) {
+    toggleGroup = !toggleGroup;  //switching 
+  }
+
+  // Using a switch two seperate leg movements
+  if (toggleGroup) {
+    // first move
+    for (int i = 0; i < legs.size(); i++) {
+      if (i % 2 == 0) {  
+        Leg leg = legs.get(i);
+        leg.update();
+      
+      }
+    }
+  } else {
+    //second move
+    for (int i = 0; i < legs.size(); i++) {
+      if (i % 2 != 0) {  
+        Leg leg = legs.get(i);
+        leg.update();
+      }
+      
+    }
   }
   // Draw body
   noStroke();
@@ -55,7 +85,7 @@ class Leg {
     startY = footy;
     position = new PVector(footx, footy);
     end = new PVector(endx, endy);
-    velocity = new PVector(0, 5); // Initial velocity for vertical movement
+    velocity = new PVector(0, 8); // Initial velocity for vertical movement
     knee = new PVector(); // Initialize the knee vector
   }
 
