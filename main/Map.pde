@@ -32,7 +32,7 @@ class Map {
     // SETTING(Parameter)
   void setVelocity(float vx, float vy,boolean stop) {
    
-    println(velocity.x,velocity.y);
+    println(velocity.x,velocity.y,stop);
     if(stop == false){
      
       velocity.add(vx,vy);
@@ -55,8 +55,20 @@ class Map {
       
     }else if(stop == true)
     {
-     velocity.set(0,0); //brake!
+     //velocity.set(0,0); //brake!
      //I need a slow down animation later, but I will move on to another function now
+     if(velocity.y > 0)
+      {
+      velocity.y -= 2; 
+      }else if(velocity.y < 0)
+       velocity.y += 2; 
+      {
+       if(velocity.x > 0)
+      {
+      velocity.x -= 2; 
+      }else if(velocity.x < 0)
+       velocity.x += 2; 
+      }
     }
     
   }
