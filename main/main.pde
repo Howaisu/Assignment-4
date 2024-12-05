@@ -91,18 +91,19 @@ void draw() {
   
 }
 void keyPressed() {
-  
-  if (key == 'W'||key == 'w') {
-    myMap.update(0, 10);   //UP
-    //
-    debug("going up");
-  } else if (key == 'S'||key == 's') {
-    myMap.update(0, -10);  //DOWN
-      //
-    debug("going down");
-  } else if (key == 'A'||key == 'a') {
-    myMap.update(10, 0);   //LEFT
-  } else if (key == 'D'||key == 'd') {
-    myMap.update(-10, 0);   //RIGHT
+  if (key == 'W' || key == 'w') {
+    myMap.setVelocity(0, -2);   // UP
+  } else if (key == 'S' || key == 's') {
+    myMap.setVelocity(0, 2);    // DOWN
+  } else if (key == 'A' || key == 'a') {
+    myMap.setVelocity(-2, 0);   // LEFT
+  } else if (key == 'D' || key == 'd') {
+    myMap.setVelocity(2, 0);    // RIGHT
+  }
+}
+
+void keyReleased() {
+  if (key == 'W' || key == 'w' || key == 'S' || key == 's' || key == 'A' || key == 'a' || key == 'D' || key == 'd') {
+    myMap.setVelocity(0, 0); // STOP
   }
 }

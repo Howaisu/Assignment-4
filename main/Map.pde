@@ -6,11 +6,13 @@ class Map {
   ArrayList<PVector> points = new ArrayList<PVector>(); //The pvector for blocks; saving x,y value to draw the grid
   int size;
   PVector offset; // Changed to PVector!!
+  PVector velocity; // velocity vector, to make it more smooth
 
   
   Map() {
     size = 15; //The size of block 15
     offset = new PVector(0, 0); // now needs to initialize it to (0, 0)
+    velocity = new PVector(0, 0); // starting as 0
     initializePoints(); //First initialize
   }
 
@@ -26,13 +28,26 @@ class Map {
       }
     }
   }
-
-  // Input value dx, dy to the update parameter of map class
-  //Problem: too much lag, I need make it to PVector, to make it comfortable when press 2 keys down
-  void update(float dx, float dy) {
-   offset.add(dx, dy); //update the moving part
-    initializePoints(); //Re-Initialize, to make it keep updating //problem: it can't fill the full screen aftering moved
+  //-----------VELOCITY-------------//
+    // SETTING(Parameter)
+  void setVelocity(float vx, float vy) {
+    velocity.set(vx, vy);
   }
+
+  // APPLYING/ADDING
+  void applyVelocity() {
+    offset.add(velocity);
+  }
+  
+  //----------------------//
+
+  /* Input value dx, dy to the update parameter of map class
+  //Problem: too much lag, I need make it to PVector, to make it comfortable when press 2 keys down
+  
+  void update() {
+    offset.add(dx, dy); //update the moving part
+    initializePoints(); //Re-Initialize, to make it keep updating //problem: it can't fill the full screen aftering moved
+  }*/
 
   //display the whole map
   void display() {
