@@ -1,14 +1,16 @@
 int backforce;
 boolean fire;
 int x,y;
-
+Map myMap;
 void setup() {
   size(400, 400);
+  myMap = new Map();  //get the map class
 }
 
 void draw() {
   background(255); // Refresh
-  
+
+   myMap.display();
   // Calculate the angle between the character's position and the mouse
   float angle = atan2(mouseY - height / 2, mouseX - width / 2); // rotate function
   //rotate from here
@@ -67,6 +69,7 @@ void draw() {
 
   void mousePressed(){
    fire = true;
+    //boom
   }
   
   void backforce(){
@@ -83,7 +86,23 @@ void draw() {
    fire = false;
    backforce = 0;
   } else {
-   
+   // I forgot why I kept the else
   }
   
+}
+void keyPressed() {
+  
+  if (key == 'W'||key == 'w') {
+    myMap.update(0, 10);   //UP
+    //
+    debug("going up");
+  } else if (key == 'S'||key == 's') {
+    myMap.update(0, -10);  //DOWN
+      //
+    debug("going down");
+  } else if (key == 'A'||key == 'a') {
+    myMap.update(10, 0);   //LEFT
+  } else if (key == 'D'||key == 'd') {
+    myMap.update(-10, 0);   //RIGHT
+  }
 }
