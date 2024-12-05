@@ -8,6 +8,7 @@ Map myMap;
 //
 PVector Current = new PVector();
 int ammo;
+int maxAmmo = 12;
 ArrayList<Ammo> ammos = new ArrayList<Ammo>();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 boolean empty;
@@ -24,10 +25,10 @@ void setup() {
   //
    Current.x = 25;
    Current.y = -102;
-  //AMMO INTIAL
-  ammo = 12;
+  // Initialize Ammo
+  ammo = maxAmmo;
   empty = false;
-  //
+   // Fill ammo list
   for (int i = 0; i < ammo; i++) {
     ammos.add(new Ammo());
   }
@@ -123,13 +124,16 @@ void draw() {
   fill(232,218,28);
  // ellipse(bulletLocation.x,bulletLocation.y,20,20);
  // ------------------------------------UI-----------------------Layer---------------------TOP----------------//
-   for (int i = 0; i < ammos.size(); i++) {
-    int x = 280 + i * 8; //dis
+ // Display Ammo UI
+  for (int i = 0; i < ammos.size(); i++) {
+    int x = 280 + i * 8; // Spacing between ammo icons
     ammos.get(i).display(x);
   }
-  if(empty != false){
+
+  if (empty) {
     textSize(24);
-    text("Press 'R' to reload",120,300);
+    fill(255);
+    text("Press 'R' to reload", 110, 300);
   }
  
  //-------------------------------------------------------------------------------------------------------//
@@ -141,31 +145,30 @@ void mousePressed() {
   //Ammo
    if(ammo>0){
   ammo = ammo -1;
-  ammos.remove(ammos.size() - 1);
+  ammos.remove(ammos.size() - 1); //after adding reload , here is no longer make sense
    }
   println(ammo);
    //Boom
   
-  if(ammo>0){
-  fire = true; 
-  //Bullet track
-   // Calculate direction from the -center- of the screen to the mouse position
-   //HOW TO MAKE IT TO THE MUZZLE OF ThE GUN AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-  PVector direction = new PVector(mouseX - width / 2, mouseY - height / 2);
-  direction.normalize(); // Normalize to get unit vector
-  direction.mult(5); // Multiply by the desired bullet speed (e.g., 5)
-
-  // Create a new bullet from the center of the screen
-  Bullet newBullet = new Bullet(width / 2, height / 2, direction);
-  bullets.add(newBullet); // Add the bullet to the list
-  //
-
-
-  }
-  else {
-   empty = true;
   
+ if (ammo > 0) {
+    ammo -= 1;
+    ammos.remove(ammos.size() - 1);
+    empty = ammo == 0; // Update empty status
+
+    fire = true;
+
+    // Bullet direction and creation
+    PVector direction = new PVector(mouseX - width / 2, mouseY - height / 2);
+    direction.normalize();
+    direction.mult(5); // Set bullet speed
+
+    Bullet newBullet = new Bullet(width / 2, height / 2, direction);
+    bullets.add(newBullet);
+  } else {
+    empty = true;
   }
+  
  
   
 
@@ -199,7 +202,21 @@ void keyPressed() {
     velocity.x = 2;
   } else if (key == 'D' || key == 'd') {
     velocity.x = -2;
-  }
+  } 
+    // Reload ammo
+  if (key == 'R' || key == 'r') {
+  
+   // println(a);
+    //if (!play) {
+    ammo = maxAmmo;
+    ammos.clear();
+    for (int i = 0; i < ammo; i++) {
+      ammos.add(new Ammo());
+    }
+    empty = false; // Reset empty status
+    }
+  //}
+
 }
 
 void keyReleased() {
