@@ -9,7 +9,7 @@ void setup() {
 
 void draw() {
   background(255); // Refresh
-
+    myMap.applyVelocity(); // 
    myMap.display();
   // Calculate the angle between the character's position and the mouse
   float angle = atan2(mouseY - height / 2, mouseX - width / 2); // rotate function
@@ -92,13 +92,13 @@ void draw() {
 }
 void keyPressed() {
   if (key == 'W' || key == 'w') {
-    myMap.setVelocity(0, -2);   // UP
+    myMap.setVelocity(0, 2);   // UP
   } else if (key == 'S' || key == 's') {
-    myMap.setVelocity(0, 2);    // DOWN
+    myMap.setVelocity(0, -2);    // DOWN
   } else if (key == 'A' || key == 'a') {
-    myMap.setVelocity(-2, 0);   // LEFT
+    myMap.setVelocity(2, 0);   // LEFT
   } else if (key == 'D' || key == 'd') {
-    myMap.setVelocity(2, 0);    // RIGHT
+    myMap.setVelocity(-2, 0);    // RIGHT
   }
 }
 
