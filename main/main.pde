@@ -7,8 +7,10 @@ boolean fire;
 Map myMap;
 //
 PVector Current = new PVector();
-
+int ammo;
+ArrayList<Ammo> ammos = new ArrayList<Ammo>();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+boolean empty;
 /*
 I gonna figure out the slope of it. So.... k=dy/dx
 or think another way, slope rate is actually the ratio of bullet.y : bullet.x
@@ -22,9 +24,15 @@ void setup() {
   //
    Current.x = 25;
    Current.y = -102;
+  //AMMO INTIAL
+  ammo = 12;
+  empty = false;
   //
-  // Initialize 10 enemies with random positions
-  for (int i = 0; i < 30; i++) {
+  for (int i = 0; i < ammo; i++) {
+    ammos.add(new Ammo());
+  }
+  // ENEMY INITIAL
+  for (int i = 0; i < 50; i++) {
     enemies.add(new Enemy(random(width*10), random(height*10)));
   }
 }
@@ -97,7 +105,7 @@ void draw() {
   //Gun
   fill(0);
   rect(Current.x, Current.y + backforce, 10, 45);
-  println(Current.x, Current.y );
+  //println(Current.x, Current.y );
   
   //Head
   stroke(0);
@@ -112,15 +120,34 @@ void draw() {
   
   //Debug
   //println("now the bullet location is"+bulletSpeed);
-  fill(255,0,0);
+  fill(232,218,28);
  // ellipse(bulletLocation.x,bulletLocation.y,20,20);
+ // ------------------------------------UI-----------------------Layer---------------------TOP----------------//
+   for (int i = 0; i < ammos.size(); i++) {
+    int x = 280 + i * 8; //dis
+    ammos.get(i).display(x);
+  }
+  if(empty != false){
+    textSize(24);
+    text("Press 'R' to reload",120,300);
+  }
+ 
+ //-------------------------------------------------------------------------------------------------------//
 }
 
 
 void mousePressed() {
-  //Boom
-  fire = true; 
  
+  //Ammo
+   if(ammo>0){
+  ammo = ammo -1;
+  ammos.remove(ammos.size() - 1);
+   }
+  println(ammo);
+   //Boom
+  
+  if(ammo>0){
+  fire = true; 
   //Bullet track
    // Calculate direction from the -center- of the screen to the mouse position
    //HOW TO MAKE IT TO THE MUZZLE OF ThE GUN AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -132,6 +159,17 @@ void mousePressed() {
   Bullet newBullet = new Bullet(width / 2, height / 2, direction);
   bullets.add(newBullet); // Add the bullet to the list
   //
+
+
+  }
+  else {
+   empty = true;
+  
+  }
+ 
+  
+
+  
 }
 
 void backforce() {
