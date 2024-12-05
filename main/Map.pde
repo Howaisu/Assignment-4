@@ -11,7 +11,7 @@ class Map {
 
 
   Map() {
-    size = 30; 
+    size = 30; //size of the grid
   }
 
 
@@ -20,9 +20,10 @@ class Map {
     background(125);
     
     stroke(0);
+    //draw the grid
     for (int x = 0; x < height*10; x += size) {
       for (int y = 0; y < width*10; y += size) {
-        //
+        //horizontal and vertical, I need make the character more the center and/or force them stay in game zone
         line(x, y, x + size, y);
         line(x, y, x, y + size);
       }

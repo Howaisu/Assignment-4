@@ -3,9 +3,12 @@ class Enemy {
   float size; //whatever
 
   //
+   boolean hit;
+  //
   Enemy(float x, float y) {
     position = new PVector(x, y);
     size = 20; // 20x20
+    hit = false;
   }
 
   // 
