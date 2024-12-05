@@ -26,46 +26,53 @@ and input this value to bullet to have an ray
 */
 void setup() {
   size(400, 400);
-  //Sound
+  
+  // Sound initialization
   pistol = new SoundFile(this, "pistol.wav");
   runout = new SoundFile(this, "runout.wav");
   refill = new SoundFile(this, "refill.wav");
   hit = new SoundFile(this, "hit.wav");
-  
-  
-  
+
   myMap = new Map();
-  //
-   Current.x = 25;
-   Current.y = -102;
+  Current.x = 25;
+  Current.y = -102;
+
   // Initialize Ammo
   ammo = maxAmmo;
   empty = false;
-   // Fill ammo list
+
+  // Fill ammo list
   for (int i = 0; i < ammo; i++) {
     ammos.add(new Ammo());
   }
-  // ENEMY INITIAL
+
+  // ENEMY INITIALIZATION
   for (int i = 0; i < 50; i++) {
-    enemies.add(new Enemy(random(width*2), random(height*2)));
+    enemies.add(new Enemy(random(width * 2), random(height * 2)));
   }
 }
 
 void draw() {
   background(255);
 
-  // Apply velocity for smooth movement
+ // Apply velocity for smooth movement
   translation.add(velocity);
 
-  // Use translate() to move the map and enemies
+  // Update enemy positions to reflect movement in the opposite direction of the player
+  for (Enemy enemy : enemies) {
+    enemy.position.add(velocity); // Update enemy position in opposite direction of player movement
+  }
+
+  // Display the map
   pushMatrix();
   translate(translation.x, translation.y);
   myMap.display();
+  popMatrix();
+
   // Display all enemies
   for (Enemy enemy : enemies) {
     enemy.display();
   }
-  popMatrix();
   
   
   //BUllet Layer

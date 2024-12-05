@@ -9,7 +9,7 @@ class Enemy {
   float px,py;
   Enemy(float x, float y) {
     position = new PVector(x, y);
-    size = 20; // 20x20
+    size = 25; // 
     hit = false;
     health = maxHealth;
   }
@@ -37,4 +37,17 @@ class Enemy {
     }*/
   // hit = false;
   }
+  
+  void move()
+  {
+     // Move towards the player (width/2,height/2)
+    PVector playerPosition = new PVector(width / 2, height / 2); //write in the location of player
+    PVector direction = PVector.sub(playerPosition, position);  // get the direction
+    direction.normalize();  //normalize again(before I got an issue without this, it told me something can't be float, I searched and found it need this thing)
+    direction.mult(10); // Set enemy speed
+    //debug check whether activated
+    println(direction);
+    position.add(direction); //running to there
+  }
+
 }
