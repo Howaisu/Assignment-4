@@ -34,7 +34,7 @@ void setup() {
   }
   // ENEMY INITIAL
   for (int i = 0; i < 50; i++) {
-    enemies.add(new Enemy(random(width*10), random(height*10)));
+    enemies.add(new Enemy(random(width*2), random(height*2)));
   }
 }
 
@@ -65,7 +65,23 @@ void draw() {
     // Remove bullet if it moves off screen
     if (b.position.x < 0 || b.position.x > width || b.position.y < 0 || b.position.y > height) {
       bullets.remove(i); //It's not that important for ArrayList, but I still think I need include this one
+      continue;  
+  }
+    for (int j = enemies.size() - 1; j >= 0; j--) {
+    //IDK why it won't work after hit few enemies, I need to solve it. It works well at beginning
+    Enemy enemy = enemies.get(j);
+   
+    float distance = dist(b.position.x, b.position.y, enemy.position.x, enemy.position.y);
+    
+    
+    if (distance < enemy.size / 2) {
+      bullets.remove(i);  
+      enemy.hurt();      
+      println("hit!");
+     // enemy.px = direction
+      break;
     }
+  }
   }
 
   //
@@ -161,6 +177,7 @@ void mousePressed() {
     // Bullet direction and creation
     PVector direction = new PVector(mouseX - width / 2, mouseY - height / 2);
     direction.normalize();
+    println(direction.x,direction.y);
     direction.mult(5); // Set bullet speed
 
     Bullet newBullet = new Bullet(width / 2, height / 2, direction);
@@ -170,7 +187,7 @@ void mousePressed() {
   }
   
  
-  
+
 
   
 }
