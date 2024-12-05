@@ -1,60 +1,71 @@
+// Spawn 10 enemies in the main program
+ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+PVector velocity = new PVector(0, 0); // To store the map velocity
+PVector translation = new PVector(0, 0); // Translation of the map
 int backforce;
 boolean fire;
-int x,y;
 Map myMap;
+
 void setup() {
   size(400, 400);
-  myMap = new Map();  //get the map class
+  
+  myMap = new Map();
+  
+  // Initialize 10 enemies with random positions
+  for (int i = 0; i < 30; i++) {
+    enemies.add(new Enemy(random(width*10), random(height*10)));
+  }
 }
 
 void draw() {
-  background(255); // Refresh
-    myMap.applyVelocity(); // 
-   myMap.display();
-  // Calculate the angle between the character's position and the mouse
-  float angle = atan2(mouseY - height / 2, mouseX - width / 2); // rotate function
-  //rotate from here
-  pushMatrix();
-  translate(width / 2, height / 2); // Move origin to character's center
-  rotate(angle + PI / 2); // Rotate to face the mouse, adjusted by PI/2 for original downward direction
+  background(255);
 
-  // Draw the character
- // println("Debug: The fire == "+fire);//debug
+  // Apply velocity for smooth movement
+  translation.add(velocity);
+
+  // Use translate() to move the map and enemies
+  pushMatrix();
+  translate(translation.x, translation.y);
+  myMap.display();
+  // Display all enemies
+  for (Enemy enemy : enemies) {
+    enemy.display();
+  }
+  popMatrix();
+  //
+  float angle = atan2(mouseY - height / 2, mouseX - width / 2);
+
+
+  //
+  pushMatrix();
   
-  //fire
-  if(fire == true){
-    stroke(255,0,0,30);
-    fill(255,255,0,50);
-    ellipse(+30+random(3), -105 - random(8),22+frameCount%8,22+frameCount%8);  
-    ellipse(+30+random(3), -105 + random(8),22+frameCount%8,22+frameCount%8);  
+  translate(width / 2, height / 2); 
+  rotate(angle + PI / 2);  
+  if (fire) {
+    stroke(255, 0, 0, 30);
+    fill(255, 255, 0, 50);
+    ellipse(+30 + random(3), -105 - random(8), 22 + frameCount % 8, 22 + frameCount % 8);
+    ellipse(+30 + random(3), -105 + random(8), 22 + frameCount % 8, 22 + frameCount % 8);
     noStroke();
-    fill(255,12,12,15);
-    ellipse(+30+random(3), -95 + random(8),32+frameCount%8,32+frameCount%8);  
+    fill(255, 12, 12, 15);
+    ellipse(+30 + random(3), -95 + random(8), 32 + frameCount % 8, 32 + frameCount % 8);
     backforce();
   }
-  else
-  {
-  
-  }
-  stroke(0);
-  
-  // Hand
+ 
   fill(255, 229, 204);
   rect(+20, -70, 20, 20);
 
-  // Body
+ 
+
   fill(255, 0, 0);
   rect(-40, -10, 80, 30);
-  rect(+20, -50, 20, 40);//arm
+  rect(+20, -50, 20, 40); 
 
-  // Gun
+
   fill(0);
-  rect(+25, -102+backforce, 10, 45);
+  rect(+25, -102 + backforce, 10, 45);
 
-  stroke(255, 0, 0);
- // line(+25, +52, mouseX - width / 2, mouseY - height / 2);
 
-  // Head
   stroke(0);
   fill(0);
   ellipse(0, 0, 60, 60);
@@ -62,48 +73,48 @@ void draw() {
   popMatrix();
 
   noFill();
-  ellipse(width / 2, height / 2, 350, 350); // Circle around character, just useless
-  
-
+  ellipse(width / 2, height / 2, 350, 350); 
 }
 
-  void mousePressed(){
-   fire = true;
-    //boom
-  }
-  
-  void backforce(){
-    //backforce animation
-   if (fire && backforce < 18) {
+
+void mousePressed() {
+  fire = true; // 当鼠标按下时，开火
+}
+
+void backforce() {
+  if (fire && backforce < 18) {
     backforce += 3;
-    
-    } 
-    if (!fire && backforce > 18) {
-    backforce --;
-    }
-    
-   if (backforce >= 18) {
-   fire = false;
-   backforce = 0;
-  } else {
-   // I forgot why I kept the else
+  } 
+  if (!fire && backforce > 18) {
+    backforce--;
   }
-  
+  if (backforce >= 18) {
+    fire = false;
+    backforce = 0;
+  }
 }
+
+
+
+
 void keyPressed() {
+  // Set velocity values
   if (key == 'W' || key == 'w') {
-    myMap.setVelocity(0,2,false);  // UP
+    velocity.y = 2;
   } else if (key == 'S' || key == 's') {
-    myMap.setVelocity(0,-2,false);    // DOWN
+    velocity.y = -2;
   } else if (key == 'A' || key == 'a') {
-    myMap.setVelocity(2,0,false);   // LEFT
+    velocity.x = 2;
   } else if (key == 'D' || key == 'd') {
-    myMap.setVelocity(-2,0,false);    // RIGHT
+    velocity.x = -2;
   }
 }
 
 void keyReleased() {
-  if (key == 'W' || key == 'w' || key == 'S' || key == 's' || key == 'A' || key == 'a' || key == 'D' || key == 'd') {
-    myMap.setVelocity(0, 0,true); // STOP
+  // Stop movement in the corresponding direction when the key is released
+  if (key == 'W' || key == 'w' || key == 'S' || key == 's') {
+    velocity.y = 0;
+  } else if (key == 'A' || key == 'a' || key == 'D' || key == 'd') {
+    velocity.x = 0;
   }
 }
