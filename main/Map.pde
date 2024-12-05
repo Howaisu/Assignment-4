@@ -30,8 +30,35 @@ class Map {
   }
   //-----------VELOCITY-------------//
     // SETTING(Parameter)
-  void setVelocity(float vx, float vy) {
-    velocity.set(vx, vy);
+  void setVelocity(float vx, float vy,boolean stop) {
+   
+    println(velocity.x,velocity.y);
+    if(stop == false){
+     
+      velocity.add(vx,vy);
+      //IDK what's the best way, I have to limit the speed
+      if(velocity.y > 4)
+      {
+      velocity.y = 4; 
+      }else if(velocity.y < -4)
+      {
+      velocity.y = -4;
+      }
+       if(velocity.x > 4)
+      {
+      velocity.x = 4; 
+      }else if(velocity.x < -4)
+      {
+      velocity.x = -4;
+      }
+      //
+      
+    }else if(stop == true)
+    {
+     velocity.set(0,0); //brake!
+     //I need a slow down animation later, but I will move on to another function now
+    }
+    
   }
 
   // APPLYING/ADDING

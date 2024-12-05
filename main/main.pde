@@ -19,7 +19,7 @@ void draw() {
   rotate(angle + PI / 2); // Rotate to face the mouse, adjusted by PI/2 for original downward direction
 
   // Draw the character
-  println("Debug: The fire == "+fire);//debug
+ // println("Debug: The fire == "+fire);//debug
   
   //fire
   if(fire == true){
@@ -92,18 +92,18 @@ void draw() {
 }
 void keyPressed() {
   if (key == 'W' || key == 'w') {
-    myMap.setVelocity(0, 2);   // UP
+    myMap.setVelocity(0,2,false);  // UP
   } else if (key == 'S' || key == 's') {
-    myMap.setVelocity(0, -2);    // DOWN
+    myMap.setVelocity(0,-2,false);    // DOWN
   } else if (key == 'A' || key == 'a') {
-    myMap.setVelocity(2, 0);   // LEFT
+    myMap.setVelocity(2,0,false);   // LEFT
   } else if (key == 'D' || key == 'd') {
-    myMap.setVelocity(-2, 0);    // RIGHT
+    myMap.setVelocity(-2,0,false);    // RIGHT
   }
 }
 
 void keyReleased() {
   if (key == 'W' || key == 'w' || key == 'S' || key == 's' || key == 'A' || key == 'a' || key == 'D' || key == 'd') {
-    myMap.setVelocity(0, 0); // STOP
+    myMap.setVelocity(0, 0,true); // STOP
   }
 }
