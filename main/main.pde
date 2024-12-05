@@ -1,3 +1,9 @@
+//Library
+import processing.sound.*;
+SoundFile pistol;
+SoundFile runout;
+SoundFile refill;
+SoundFile hit;
 // Spawn 10 enemies in the main program
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 PVector velocity = new PVector(0, 0); // To store the map velocity
@@ -20,6 +26,13 @@ and input this value to bullet to have an ray
 */
 void setup() {
   size(400, 400);
+  //Sound
+  pistol = new SoundFile(this, "pistol.wav");
+  runout = new SoundFile(this, "runout.wav");
+  refill = new SoundFile(this, "refill.wav");
+  hit = new SoundFile(this, "hit.wav");
+  
+  
   
   myMap = new Map();
   //
@@ -150,6 +163,8 @@ void draw() {
     textSize(24);
     fill(255);
     text("Press 'R' to reload", 110, 300);
+    //
+    
   }
  
  //-------------------------------------------------------------------------------------------------------//
@@ -173,6 +188,10 @@ void mousePressed() {
     empty = ammo == 0; // Update empty status
 
     fire = true;
+    //sound
+    if (!pistol.isPlaying()) {
+    pistol.play();
+  }
 
     // Bullet direction and creation
     PVector direction = new PVector(mouseX - width / 2, mouseY - height / 2);
@@ -184,6 +203,9 @@ void mousePressed() {
     bullets.add(newBullet);
   } else {
     empty = true;
+    if (!runout.isPlaying()) {
+    runout.play();
+    }
   }
   
  
@@ -221,18 +243,24 @@ void keyPressed() {
     velocity.x = -2;
   } 
     // Reload ammo
+
+  
   if (key == 'R' || key == 'r') {
   
    // println(a);
-    //if (!play) {
+    if (!refill.isPlaying()) {
+    refill.play();
+    }
+    
     ammo = maxAmmo;
     ammos.clear();
     for (int i = 0; i < ammo; i++) {
       ammos.add(new Ammo());
     }
     empty = false; // Reset empty status
-    }
-  //}
+    
+  }
+  
 
 }
 
