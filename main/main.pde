@@ -5,15 +5,9 @@ PVector translation = new PVector(0, 0); // Translation of the map
 int backforce;
 boolean fire;
 Map myMap;
-//Bullet angle
-/*PVector bulletAngle = new PVector(0, 0);
-PVector bulletLocation = new PVector(0,0);
-PVector direction;
-//float k;
-float speed = 1;
-//PVector currentPosition;
-*/
-//Didn't make good, make it again:
+//
+PVector Current = new PVector();
+
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 /*
 I gonna figure out the slope of it. So.... k=dy/dx
@@ -25,7 +19,10 @@ void setup() {
   size(400, 400);
   
   myMap = new Map();
-  
+  //
+   Current.x = 25;
+   Current.y = -102;
+  //
   // Initialize 10 enemies with random positions
   for (int i = 0; i < 30; i++) {
     enemies.add(new Enemy(random(width*10), random(height*10)));
@@ -99,8 +96,9 @@ void draw() {
 
   //Gun
   fill(0);
-  rect(+25, -102 + backforce, 10, 45);
-
+  rect(Current.x, Current.y + backforce, 10, 45);
+  println(Current.x, Current.y );
+  
   //Head
   stroke(0);
   fill(0);
@@ -124,7 +122,8 @@ void mousePressed() {
   fire = true; 
  
   //Bullet track
-   // Calculate direction from the center of the screen to the mouse position
+   // Calculate direction from the -center- of the screen to the mouse position
+   //HOW TO MAKE IT TO THE MUZZLE OF ThE GUN AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
   PVector direction = new PVector(mouseX - width / 2, mouseY - height / 2);
   direction.normalize(); // Normalize to get unit vector
   direction.mult(5); // Multiply by the desired bullet speed (e.g., 5)
