@@ -5,6 +5,7 @@ class Ammo {
   
 
  void display(int x){
+   stroke(51,0,0);
    fill(102,102,0);
    ellipse(x+3,60,5,5);
    fill(bullet);

@@ -4,6 +4,7 @@ SoundFile pistol;
 SoundFile runout;
 SoundFile refill;
 SoundFile hit;
+PImage gun;
 // Spawn 10 enemies in the main program
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 PVector velocity = new PVector(0, 0); // To store the map velocity
@@ -12,12 +13,16 @@ int backforce;
 boolean fire;
 Map myMap;
 //
+int score;
+//
 PVector Current = new PVector();
 int ammo;
 int maxAmmo = 12;
 ArrayList<Ammo> ammos = new ArrayList<Ammo>();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 boolean empty;
+//
+//boolean walk;
 /*
 I gonna figure out the slope of it. So.... k=dy/dx
 or think another way, slope rate is actually the ratio of bullet.y : bullet.x
@@ -27,12 +32,15 @@ and input this value to bullet to have an ray
 void setup() {
   size(400, 400);
   
+  score = 0;
+  
   // Sound initialization
   pistol = new SoundFile(this, "pistol.wav");
   runout = new SoundFile(this, "runout.wav");
   refill = new SoundFile(this, "refill.wav");
   hit = new SoundFile(this, "hit.wav");
-
+  gun = loadImage("gun.png");
+  
   myMap = new Map();
   Current.x = 25;
   Current.y = -102;
@@ -98,6 +106,11 @@ void draw() {
       bullets.remove(i);  
       enemy.hurt();      
       println("hit!");
+      score ++;
+      //sound
+    //  if (!hit.isPlaying()) {
+    hit.play();
+     // }
      // enemy.px = direction
       break;
     }
@@ -122,32 +135,53 @@ void draw() {
   if (fire) {
     stroke(255, 0, 0, 30);
     fill(255, 255, 0, 50);
-    ellipse(+30 + random(3), -105 - random(8), 22 + frameCount % 8, 22 + frameCount % 8);
-    ellipse(+30 + random(3), -105 + random(8), 22 + frameCount % 8, 22 + frameCount % 8);
+    ellipse(3 + random(3), -105 - random(8), 22 + frameCount % 8, 22 + frameCount % 8);
+    ellipse(3 + random(3), -105 + random(8), 22 + frameCount % 8, 22 + frameCount % 8);
     noStroke();
     fill(255, 12, 12, 15);
     ellipse(+30 + random(3), -95 + random(8), 32 + frameCount % 8, 32 + frameCount % 8);
     backforce();
   }
+  
+  //Foot
+   // println(walk);
+  if(velocity.x!=0||velocity.y!= 0 ){
+    int m = frameCount%30;
+    fill(0);
+    rect(-20,-10 + m,20,30);
+    rect(20,-10 - m,20,30);
+  
+  }
+  
+  
   //Hand
   fill(255, 229, 204);
-  rect(+20, -70, 20, 20);
+ // rect(+20, -70, 20, 20);
+ quad(0,-80,10,-60,0,-40,-10,-60);
 
  
   //Body
-  fill(255, 0, 0);
+  fill(224);
+  //arms
+  quad(0,-40,-10,-60,-40,-10,-20,-10);
+  quad(0,-40,10,-60,40,-10,20,-10);
+  //body
+  fill(208,28,28);
   rect(-40, -10, 80, 30);
-  rect(+20, -50, 20, 40); 
+  //shoulder
+  ellipse(30,5,30,35);
+  ellipse(-30,5,30,35);
 
   //Gun
   fill(0);
-  rect(Current.x, Current.y + backforce, 10, 45);
+  rect(0, Current.y + backforce, 10, 45);
   //println(Current.x, Current.y );
   
   //Head
-  stroke(0);
-  fill(0);
-  ellipse(0, 0, 60, 60);
+  noStroke();
+  fill(0,0,51);
+  triangle(-20,-40,-30,0,10,0);
+  ellipse(0, 0, 50, 50);
 
   popMatrix();
   
@@ -160,20 +194,24 @@ void draw() {
   fill(232,218,28);
  // ellipse(bulletLocation.x,bulletLocation.y,20,20);
  // ------------------------------------UI-----------------------Layer---------------------TOP----------------//
+  //weapon UI
+  image(gun, 260, 0);
+ 
+ 
  // Display Ammo UI
   for (int i = 0; i < ammos.size(); i++) {
     int x = 280 + i * 8; // Spacing between ammo icons
     ammos.get(i).display(x);
   }
-
-  if (empty) {
     textSize(24);
     fill(255);
+  if (empty) {
+   
     text("Press 'R' to reload", 110, 300);
-    //
-    
+    //  
   }
- 
+    //
+    text("Your Score:"+score,30,80);
  //-------------------------------------------------------------------------------------------------------//
 }
 
@@ -204,7 +242,7 @@ void mousePressed() {
     PVector direction = new PVector(mouseX - width / 2, mouseY - height / 2);
     direction.normalize();
     println(direction.x,direction.y);
-    direction.mult(5); // Set bullet speed
+    direction.mult(8); // Set bullet speed
 
     Bullet newBullet = new Bullet(width / 2, height / 2, direction);
     bullets.add(newBullet);
@@ -242,16 +280,22 @@ void keyPressed() {
   // Set velocity values
   if (key == 'W' || key == 'w') {
     velocity.y = 2;
+  //   walk = true;
   } else if (key == 'S' || key == 's') {
     velocity.y = -2;
+   //  walk = true;
   } else if (key == 'A' || key == 'a') {
     velocity.x = 2;
+   //  walk = true;
   } else if (key == 'D' || key == 'd') {
     velocity.x = -2;
-  } 
-    // Reload ammo
+  //  walk = true;
+  } else
+  {
+    //walk = false;
+  }
 
-  
+  // Reload ammo
   if (key == 'R' || key == 'r') {
   
    // println(a);
