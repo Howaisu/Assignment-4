@@ -4,7 +4,7 @@ SoundFile pistol;
 SoundFile runout;
 SoundFile refill;
 SoundFile hit;
-PImage gun;
+PImage gun,intro,open;
 // Spawn 10 enemies in the main program
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 PVector velocity = new PVector(0, 0); // To store the map velocity
@@ -14,15 +14,23 @@ boolean fire;
 Map myMap;
 //
 int score;
-//
+//AMMO
 PVector Current = new PVector();
 int ammo;
 int maxAmmo = 12;
 ArrayList<Ammo> ammos = new ArrayList<Ammo>();
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 boolean empty;
+int maxHealth = 130;
+int currentHealth;
+//All for the invincible after hurt
+boolean invincible = false; // Invincibility flag
+int invincibilityStartTime = 0; // Start time of invincibility
+int invincibilityDuration = 60; // Duration of invincibility in frames
 //
-//boolean walk;
+boolean gameStarted;
+boolean gameOver;
+boolean showInstructions;
 /*
 I gonna figure out the slope of it. So.... k=dy/dx
 or think another way, slope rate is actually the ratio of bullet.y : bullet.x
@@ -33,13 +41,15 @@ void setup() {
   size(400, 400);
   
   score = 0;
-  
+  currentHealth = maxHealth;
   // Sound initialization
   pistol = new SoundFile(this, "pistol.wav");
   runout = new SoundFile(this, "runout.wav");
   refill = new SoundFile(this, "refill.wav");
   hit = new SoundFile(this, "hit.wav");
   gun = loadImage("gun.png");
+  intro = loadImage("intro.jpg");
+  open = loadImage("open.jpg");
   
   myMap = new Map();
   Current.x = 25;
@@ -56,11 +66,46 @@ void setup() {
 
   // ENEMY INITIALIZATION
   for (int i = 0; i < 50; i++) {
-    enemies.add(new Enemy(random(width * 2), random(height * 2)));
+    enemies.add(new Enemy(random(width * 8), random(height * 8)));
   }
 }
 
-void draw() {
+void draw(){
+  if (!gameStarted) {
+    drawStartScreen();
+  } else if (showInstructions) {
+    drawInstructionsScreen();
+  } else {
+    drawGame();
+  }
+}
+
+
+void drawStartScreen() {
+ 
+ // textAlign(CENTER);
+  fill(255);
+  textSize(32);
+  image(open,0,0,400,400);
+}
+
+void drawInstructionsScreen() {
+  background(0);
+  /*
+  textAlign(CENTER);
+  fill(255);
+  textSize(24);
+  text("How to Play", width / 2, height / 2 - 60);
+  textSize(16);
+  text("Use WASD to move", width / 2, height / 2 - 20);
+  text("Click to shoot", width / 2, height / 2 + 10);
+  text("Press 'B' to go back", width / 2, height / 2 + 60);
+  */
+  image(intro,0,0);
+}
+
+
+void drawGame() {
   background(255);
 
  // Apply velocity for smooth movement
@@ -117,8 +162,26 @@ void draw() {
   }
   }
 
-  //
- 
+  // Check for collision between player and enemies
+  if (!invincible) {
+    for (Enemy enemy : enemies) {
+      float playerDistance = dist(width / 2, height / 2, enemy.position.x, enemy.position.y);
+      if (playerDistance < (70 / 2 + enemy.size / 2)) {
+        currentHealth -= 30;
+        invincible = true;
+        invincibilityStartTime = frameCount; // Start invincibility
+        println("Player hit! Current health: " + currentHealth);
+        if (currentHealth <= 0) {
+          gameOver = true;
+        }
+      }
+    }
+  }
+
+  // Handle invincibility timer
+  if (invincible && frameCount > invincibilityStartTime + invincibilityDuration) {
+    invincible = false; // End invincibility after duration
+  }
   
   float angle = atan2(mouseY - height / 2, mouseX - width / 2);
   //
@@ -146,10 +209,10 @@ void draw() {
   //Foot
    // println(walk);
   if(velocity.x!=0||velocity.y!= 0 ){
-    int m = frameCount%30;
+   // int m = frameCount%30;
     fill(0);
-    rect(-20,-10 + m,20,30);
-    rect(20,-10 - m,20,30);
+    rect(-20,-10 + sin(frameCount * 0.2) * 15,20,30);
+    rect(20,-10 - sin(frameCount * 0.2) * 15,20,30);
   
   }
   
@@ -196,7 +259,11 @@ void draw() {
  // ------------------------------------UI-----------------------Layer---------------------TOP----------------//
   //weapon UI
   image(gun, 260, 0);
- 
+ //Health Bar
+  fill(102,0,0);
+  rect(30,30,130,20);
+  fill(255,0,0);
+  rect(30,30,currentHealth,20);
  
  // Display Ammo UI
   for (int i = 0; i < ammos.size(); i++) {
@@ -213,6 +280,12 @@ void draw() {
     //
     text("Your Score:"+score,30,80);
  //-------------------------------------------------------------------------------------------------------//
+ //----Game Over------//
+  if(gameOver){
+    gameOver();
+    noLoop();
+  }
+ 
 }
 
 
@@ -277,6 +350,23 @@ void backforce() {
 
 
 void keyPressed() {
+  
+  //
+  if (!gameStarted) {
+    if (key == 'S' || key == 's') {
+      gameStarted = true;
+    } else if (key == 'H' || key == 'h') {
+      showInstructions = true;
+    }
+  } else if (showInstructions) {
+    if (key == 'B' || key == 'b') {
+      showInstructions = false;
+    }
+  }
+  
+  
+
+  
   // Set velocity values
   if (key == 'W' || key == 'w') {
     velocity.y = 2;
@@ -322,4 +412,14 @@ void keyReleased() {
   } else if (key == 'A' || key == 'a' || key == 'D' || key == 'd') {
     velocity.x = 0;
   }
+}
+
+void gameOver(){
+  println("game over");
+ 
+  background(0);
+  textSize(48);
+  text("Game Over",100,height/2);
+  noLoop(); //https://processing.org/reference/noLoop_.html
+
 }

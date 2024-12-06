@@ -37,7 +37,7 @@ class Bullet {
       noFill();
     }
       
-      ellipse(position.x, position.y, 10, 3); // Draw bullet as an ellipse
+      ellipse(position.x, position.y, 5, 3); // Draw bullet as an ellipse
     
   }
 }

@@ -1,4 +1,5 @@
 class Enemy {
+  PImage ghost;
   PVector position; //this is the position now, and it will move among the map, and later, it will going to catch the player
   float size; //whatever
   int maxHealth = 30;
@@ -8,6 +9,7 @@ class Enemy {
   //
   float px,py;
   Enemy(float x, float y) {
+    ghost = loadImage("ghost.png");
     position = new PVector(x, y);
     size = 25; // 
     hit = false;
@@ -22,6 +24,7 @@ class Enemy {
      fill(255,0,0);
     }
     ellipse(position.x+px, position.y+py, size, size); 
+    image(ghost,position.x+px-10, position.y+py-10);
   }
   
   void hurt() {
