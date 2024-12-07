@@ -125,6 +125,7 @@ void drawGame() {
   // Display all enemies
   for (Enemy enemy : enemies) {
     enemy.display();
+    enemy.move();
   }
   
   
@@ -202,7 +203,7 @@ void drawGame() {
     ellipse(3 + random(3), -105 + random(8), 22 + frameCount % 8, 22 + frameCount % 8);
     noStroke();
     fill(255, 12, 12, 15);
-    ellipse(+30 + random(3), -95 + random(8), 32 + frameCount % 8, 32 + frameCount % 8);
+    ellipse(3 + random(3), -95 + random(8), 32 + frameCount % 8, 32 + frameCount % 8);
     backforce();
   }
   
@@ -294,7 +295,7 @@ void mousePressed() {
   //Ammo
    if(ammo>0){
   ammo = ammo -1;
-  ammos.remove(ammos.size() - 1); //after adding reload , here is no longer make sense
+  ammos.remove(ammos.size() - 1); 
    }
   println(ammo);
    //Boom

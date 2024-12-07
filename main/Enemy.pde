@@ -1,9 +1,11 @@
 class Enemy {
   PImage ghost;
   PVector position; //this is the position now, and it will move among the map, and later, it will going to catch the player
+  PVector move;
   float size; //whatever
   int maxHealth = 30;
   int health;
+  int xMove,yMove,speed;
   //
    boolean hit;
   //
@@ -14,6 +16,8 @@ class Enemy {
     size = 25; // 
     hit = false;
     health = maxHealth;
+    speed = 3;
+    move = new PVector();
   }
 
   // 
@@ -42,15 +46,36 @@ class Enemy {
   }
   
   void move()
-  {
+  { 
      // Move towards the player (width/2,height/2)
     PVector playerPosition = new PVector(width / 2, height / 2); //write in the location of player
     PVector direction = PVector.sub(playerPosition, position);  // get the direction
     direction.normalize();  //normalize again(before I got an issue without this, it told me something can't be float, I searched and found it need this thing)
-    direction.mult(10); // Set enemy speed
+    direction.mult(1); // Set enemy speed
     //debug check whether activated
     println(direction);
     position.add(direction); //running to there
+    
+    //old method
+  /*  if(position.x > width/2)
+    {
+      //  move = new PVector(0,2);
+      xMove = -speed;
+    }else if(position.x < width/2)
+    {
+      xMove = speed;
+    }else if(position.y > height/2)
+    {
+      yMove = speed;
+    }
+    else if(position.y < height/2)
+    {
+      yMove = -speed;
+    }
+    move = new PVector(xMove,yMove);
+    position.add(move);
+  */
+    
   }
 
 }
